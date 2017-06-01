@@ -1,0 +1,68 @@
+<--
+    @license
+    Copyright (C) 2017 - Donato Pirozzi (donatopirozzi[at]gmail[dot]com)
+    This file is part of WEBWIDGET framework.
+    WEBWIDGET is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    WEBWIDGET is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+    Distributed under the GNU LGPL v3. For full terms see the file LICENSE.
+    License: http://www.gnu.org/licenses/lgpl.html LGPL version 3 or higher
+
+    Contributors:
+        - Donato Pirozzi (donatopirozzi[at]gmail[dot]com)
+-->
+
+<dom-module id="ww-textbox">
+    <template>
+
+        <span id="lblLabel">label</span>
+        <input id="txtTextbox" type="text" name="" value="">
+
+    </template>
+    <script type="text/javascript" src="../ww-core/webwidgets.js"></script>
+    <script>
+        class WWTextbox extends HTMLElement {
+
+            constructor() {
+                super();
+            }//EndConstructor.
+
+            constructedCallback() {
+                var $self = this;
+                this.$.lblLabel = this.shadowRoot.getElementById('lblLabel');
+                this.$.txtTextbox = this.shadowRoot.getElementById('txtTextbox');
+                this.$.txtTextbox.oninput = function(event) {
+                    //Here this is the internal element 'input[type=text]' of template.
+                    //$self is the web component.
+                    $self.value = this.value;
+                };
+            }//EndCallback.
+
+            static get is() { return 'ww-textbox'; }
+
+            static get observedAttributes() { return ['label', 'name', 'value']; }
+
+            //Respond to attribute changes.
+            attributeChangedCallback(attr, oldValue, newValue) {
+                if (attr == 'name')
+                    this.$.txtTextbox.name = newValue;
+                else if (attr == 'value')
+                    this.$.txtTextbox.value = newValue;
+                else if (attr == 'label')
+                    this.$.lblLabel.innerText = newValue;
+                else
+                    console.error('Unknown attribute ' + attr);
+
+                this['_' + attr] = newValue;
+            }//EndFunction.
+
+        }//EndClass.
+
+        WebWidgets.define(WWTextbox);
+    </script>
+</dom-module>
